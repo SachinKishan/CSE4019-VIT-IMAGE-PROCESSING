@@ -17,10 +17,8 @@
  *  
  */
 
-std::vector<unsigned char> image; //the raw pixels
-unsigned width, height;
 #pragma region PNG
-void encodeOneStep(const char* filename, std::vector<unsigned char>& image, unsigned width, unsigned height) {
+void encodeOneStep(const char* filename, std::vector<unsigned char>& image, unsigned &width, unsigned &height) {
     //Encode the image
     unsigned const error = lodepng::encode(filename, image, width, height);
 
@@ -28,7 +26,7 @@ void encodeOneStep(const char* filename, std::vector<unsigned char>& image, unsi
     if (error) std::cout << "encoder error " << error << ": " << lodepng_error_text(error) << std::endl;
 }
 
-void decodeOneStep(const char* filename) {
+void decodeOneStep(const char* filename,  std::vector<unsigned char>& image, unsigned& width, unsigned& height) {
 
     //decode
     unsigned error = lodepng::decode(image, width, height, filename);
@@ -42,19 +40,25 @@ void decodeOneStep(const char* filename) {
 
 int main()
 {
-    std::cout << "Hello World!\n";
-    const char* filename = "out1.png";
-    std::vector<unsigned char> image;
+    std::vector<unsigned char> inputimage; //the raw pixels
+    std::vector<unsigned char> outputimage;
+
+	const char* inputfilename = "input.png";
+    const char* outputfilename = "output.png";
     const auto aspect_ratio = 1;
-    const size_t image_width = 1024;
-    const size_t image_height = static_cast<int>(image_width / aspect_ratio);
-    int total = image_width * image_height;
-    const int samples_per_pixel = 1;
+    unsigned image_width;
+	unsigned image_height;
+    decodeOneStep(inputfilename,inputimage,image_width,image_height);
+	int total = image_width * image_height;
+
+    outputimage = inputimage;
+
+
+
     //image resizing
-    image.resize(image_width * image_height * 4);
+    outputimage.resize(image_width * image_height * 4);
 
-	encodeOneStep(filename, image, image_width, image_height);
-
+	encodeOneStep(outputfilename, outputimage, image_width, image_height);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
