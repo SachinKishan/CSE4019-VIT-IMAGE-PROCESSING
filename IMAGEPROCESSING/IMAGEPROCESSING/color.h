@@ -7,7 +7,7 @@ public:
 	color() :r(0), g(0), b(0) {}
 	color(double _r,double _g, double _b) :r(_r), g(_g), b(_b) {}
 	color(double c0) :r(c0), g(c0), b(c0) {}
-	color operator-()const { return color(-r, -g - , b); }
+	color operator-()const { return color(-r, -g, -b); }
 	
 	color& operator+=(const color& c)
 	{

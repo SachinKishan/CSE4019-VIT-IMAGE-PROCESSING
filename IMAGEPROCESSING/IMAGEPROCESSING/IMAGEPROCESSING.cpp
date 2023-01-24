@@ -1,10 +1,18 @@
 // IMAGEPROCESSING.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+
+
 #include <iostream>
 
 #include "lodepng.h"
 #include "color.h"
+#include "image.h"
+
+const int MAX_COLOR_VALUE = 255;
+const int MIN_COLOR_VALUE = 0;
+
+
 //todo
 /**
  *  Add method to read everything to grayscale
@@ -47,23 +55,18 @@ void color_image_pixel(std::vector<unsigned char> &image,int x,int y, color c, u
 
     int val = 4 * image_width * (image_height - y) + 4 * x;
     //allot color
-    image[val + 0] = c.r;
+    image[val] = c.r;
     image[val + 1] = c.g;
     image[val + 2] = c.b;
     image[val + 3] = 255;//alpha value of 1
 }
 
-//todo: fill in this function such that i can send a x,y position in the image and return the corresponding color value in the form we want
-color return_color_in_pixel()
-{
-    return color();
-}
 
-color color_to_grayscale(color c)
-{
-	//\mathbf{grayscale = 0.3 * R + 0.59 * G + 0.11 * B}
 
+color color_to_greyscale(color c)
+{
     float col = (0.3 * c.r) + (0.59 * c.g) + (0.11 * c.b);
+    return col;
 }
 
 inline double random_double() {
@@ -77,6 +80,17 @@ inline double random_double(double min, double max) {
 }
 
 
+color contrast(color c)
+{
+    return MAX_COLOR_VALUE - c;
+}
+
+color thresholding(color c, int m)
+{
+    if (c.r >= m)return MAX_COLOR_VALUE;
+    else return 0;
+}
+
 
 int main()
 {
@@ -89,28 +103,26 @@ int main()
     unsigned image_width;
 	unsigned image_height;
 
-
     decodeOneStep(inputfilename,inputimage,image_width,image_height);
-	int total = image_width * image_height;
+    image input(inputfilename, inputimage, image_width, image_height);
 
     //image resizing
     outputimage.resize(image_width * image_height * 4);
 
     //processing
 
-    outputimage = inputimage;
+    image output(outputfilename, outputimage, input.width, input.height);
 
     for(int y=image_height-1;y>0;y--)
     {
-	    for(int x=0;i<image_height;x++)
+	    for(int x=1;x<image_height;x++)
 	    {
-            int val = 4 * image_width * (image_height - y) + 4 * x;
 			//todo: allow every pixel to be colored in some color depending on the operation used
+            color c = color_to_greyscale(input(x, y));
+	    	output.colorIn(x, y, contrast(c));
 	    }
     }
-
-
-	encodeOneStep(outputfilename, outputimage, image_width, image_height);
+	encodeOneStep(output.filename, output.pixels, output.width, output.height);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
