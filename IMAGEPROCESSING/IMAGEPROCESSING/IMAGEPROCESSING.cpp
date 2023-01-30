@@ -4,10 +4,11 @@
 
 
 #include <iostream>
-
 #include "lodepng.h"
 #include "color.h"
 #include "image.h"
+#include "convolution.h"
+
 
 const int MAX_COLOR_VALUE = 255;
 const int MIN_COLOR_VALUE = 0;
@@ -97,8 +98,8 @@ int main()
     std::vector<unsigned char> inputimage; //the raw pixels
     std::vector<unsigned char> outputimage;
 
-	const char* inputfilename = "input.png";
-    const char* outputfilename = "output.png";
+	const char* inputfilename = "out1.png";
+    const char* outputfilename = "out2.png";
     const auto aspect_ratio = 1;
     unsigned image_width;
 	unsigned image_height;
@@ -110,15 +111,15 @@ int main()
     outputimage.resize(image_width * image_height * 4);
 
     //processing
-
     image output(outputfilename, outputimage, input.width, input.height);
-
+    filter f(-1, -1, -1, -1, 9, -1, -1, -1, -1);
     for(int y=image_height-1;y>0;y--)
     {
-	    for(int x=1;x<image_height;x++)
+	    for(int x=1;x<image_width;x++)
 	    {
 			//todo: allow every pixel to be colored in some color depending on the operation used
-            color c =contrast(thresholding(input(x, y),100));
+            //color c = convolution(input, x, y, f);
+            color c = median_filter(input,x,y);
 	    	output.colorIn(x, y, (c));
 	    }
     }

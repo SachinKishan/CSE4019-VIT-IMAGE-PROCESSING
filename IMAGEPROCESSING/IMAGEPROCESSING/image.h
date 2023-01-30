@@ -12,9 +12,9 @@ public:
 	{}
 
 	const char* filename;
+	std::vector<unsigned char> pixels;
 	unsigned int width;
 	unsigned int height;
-	std::vector<unsigned char> pixels;
 
 	color operator()(int x,int y)const
 	{

@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <algorithm>
 class filter//radius will always be three- for convenience
 {
 public:
@@ -23,4 +23,28 @@ public:
        
     }
 };
+
+inline color median_filter(image img, int x, int y)//only applies to grayscale images
+{
+    int tempx, tempy;
+    color val,temp;
+    std::vector<double> vals;
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            tempx = x - (i - 1);//x-the i value should flip it
+            tempy = y - (j - 1);//same flip for y, means convolution will take place instead f correlation
+            if (tempx <= 0 || tempy <= 0 || tempy >= img.height || tempx >= img.width)
+                vals.push_back(0);//zero padding todo: padding functions
+            else
+                vals.push_back(img(tempx, tempy).r);
+
+        }
+    }
+
+    std::sort(std::begin(vals), std::end(vals));
+
+    return color(vals[4]);
+}
 
