@@ -32,5 +32,11 @@
     <ClInclude Include="image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="convolution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="filter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

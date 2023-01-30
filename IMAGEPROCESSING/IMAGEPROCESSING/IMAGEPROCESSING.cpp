@@ -87,7 +87,7 @@ color contrast(color c)
 
 color thresholding(color c, int m)
 {
-    if (c.r >= m)return MAX_COLOR_VALUE;
+    if (c >= m)return c;
     else return 0;
 }
 
@@ -118,8 +118,8 @@ int main()
 	    for(int x=1;x<image_height;x++)
 	    {
 			//todo: allow every pixel to be colored in some color depending on the operation used
-            color c = color_to_greyscale(input(x, y));
-	    	output.colorIn(x, y, contrast(c));
+            color c =contrast(thresholding(input(x, y),100));
+	    	output.colorIn(x, y, (c));
 	    }
     }
 	encodeOneStep(output.filename, output.pixels, output.width, output.height);

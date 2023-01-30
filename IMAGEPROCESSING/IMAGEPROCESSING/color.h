@@ -25,8 +25,37 @@ public:
 		return *this;
 	}
 
+	color& operator+(double a)
+	{
+		r += a;
+		g += a;
+		b += a;
+		return *this;
+	}
+
 	color& operator/=(const double t) {
 		return *this *= 1 / t;
+	}
+
+	bool operator>(double a)
+	{
+		return r > a && g > a && b > a;
+	}
+	bool operator<(double a)
+	{
+		return r < a && g < a && b < a;
+	}
+	bool operator==(double a)
+	{
+		return r == a && g == a && b == a;
+	}
+	bool operator>=(double a)
+	{
+		return r >= a && g >= a && b >= a;
+	}
+	bool operator<=(float a)
+	{
+		return r <= a && g <= a && b <= a;
 	}
 
 };
