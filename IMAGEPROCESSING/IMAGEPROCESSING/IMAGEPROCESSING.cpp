@@ -8,10 +8,7 @@
 #include "color.h"
 #include "image.h"
 #include "convolution.h"
-
-
-const int MAX_COLOR_VALUE = 255;
-const int MIN_COLOR_VALUE = 0;
+#include "pointwiseoperations.h"
 
 
 //todo
@@ -80,17 +77,6 @@ inline double random_double(double min, double max) {
     return min + (max - min) * random_double();
 }
 
-
-color contrast(color c)
-{
-    return MAX_COLOR_VALUE - c;
-}
-
-color thresholding(color c, int m)
-{
-    if (c >= m)return c;
-    else return 0;
-}
 
 
 int main()
