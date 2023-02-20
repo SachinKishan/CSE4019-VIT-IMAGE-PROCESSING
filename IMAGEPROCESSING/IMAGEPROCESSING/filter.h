@@ -42,7 +42,6 @@ inline color median_filter(image img, int x, int y)//only applies to grayscale i
 
         }
     }
-
     std::sort(std::begin(vals), std::end(vals));
 
     return color(vals[4]);

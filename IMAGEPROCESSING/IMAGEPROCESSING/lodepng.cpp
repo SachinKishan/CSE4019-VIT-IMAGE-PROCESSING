@@ -131,11 +131,11 @@ static void lodepng_memset(void* LODEPNG_RESTRICT dst,
 
 /* does not check memory out of bounds, do not use on untrusted data */
 static size_t lodepng_strlen(const char* a) {
-  const char* orig = a;
-  /* avoid warning about unused function in case of disabled COMPILE... macros */
-  (void)(&lodepng_strlen);
-  while(*a) a++;
-  return (size_t)(a - orig);
+    const char* orig = a;
+    /* avoid warning about unused function in case of disabled COMPILE... macros */
+    (void)(&lodepng_strlen);
+    while (*a) a++;
+    return (size_t)(a - orig);
 }
 
 #define LODEPNG_MAX(a, b) (((a) > (b)) ? (a) : (b))

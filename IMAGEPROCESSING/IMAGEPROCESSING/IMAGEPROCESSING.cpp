@@ -93,13 +93,19 @@ color thresholding(color c, int m)
 }
 
 
+double_t value_component_enhancement(double v, double vbar,double Vmax)
+{
+    double vdash = log((v / vbar) + 1) / log((Vmax/vbar)+1);
+    return vdash;
+}
+
 int main()
 {
     std::vector<unsigned char> inputimage; //the raw pixels
     std::vector<unsigned char> outputimage;
 
-	const char* inputfilename = "out1.png";
-    const char* outputfilename = "out2.png";
+	const char* inputfilename = "low-light-photo-of-city.png";
+    const char* outputfilename = "output.png";
     const auto aspect_ratio = 1;
     unsigned image_width;
 	unsigned image_height;
@@ -112,17 +118,55 @@ int main()
 
     //processing
     image output(outputfilename, outputimage, input.width, input.height);
-    filter f(-1, -1, -1, -1, 9, -1, -1, -1, -1);
+
+    double Vbar=0;
+    double Vmax=0;
+
+    //rgb to hsv
+    for (int y = image_height - 1; y > 0; y--)
+    {
+        for (int x = 1; x < image_width; x++)
+        {
+            color c =RGB_to_HSV(input(x, y));
+            input.colorIn(x, y, (c));
+        }
+    }
+
+    //finding vmax
+    for (int y = image_height - 1; y > 0; y--)
+    {
+        for (int x = 1; x < image_width; x++)
+        {
+            if (Vmax < input(x, y).b)Vmax = input(x, y).b;
+        }
+    }
+
+    //vbar calculation
+    for (int y = image_height - 1; y > 0; y--)
+    {
+        for (int x = 1; x < image_width; x++)
+        {
+            Vbar += log(input(x, y).b + 0.001);
+        }
+    }
+    const unsigned int N = input.width * input.height;
+    Vbar /= N;
+    Vbar = exp(Vbar);
     for(int y=image_height-1;y>0;y--)
     {
 	    for(int x=1;x<image_width;x++)
 	    {
 			//todo: allow every pixel to be colored in some color depending on the operation used
             //color c = convolution(input, x, y, f);
-            color c = median_filter(input,x,y);
+            color c = (input(x, y));
+            c.b = value_component_enhancement(c.b, Vbar, Vmax)*100;
+            //std::cout<<c<<std::endl;
+            c = HSVtoRGB(c.r, c.g, c.b);
 	    	output.colorIn(x, y, (c));
 	    }
     }
+
+
 	encodeOneStep(output.filename, output.pixels, output.width, output.height);
 }
 
