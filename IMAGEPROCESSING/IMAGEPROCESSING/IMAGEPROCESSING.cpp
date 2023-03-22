@@ -99,13 +99,85 @@ double_t value_component_enhancement(double v, double vbar,double Vmax)
     return vdash;
 }
 
+void k_means(image &img )
+{
+    color k1=img(
+        img.width/2,
+        img.height/2);
+
+    color k2 = img(
+        img.width / 4,
+        img.height / 4);
+    color m1, m2, m1old, m2old;
+    std::vector<int> cluster(img.height*img.width);
+	int val = 0;
+    int iter = 0;
+    int maxiteration = 100; 
+    int n1 = 0, n2 = 0;
+    while (iter < maxiteration)
+    {
+        for (int j = img.height - 1; j > 0; j--)
+        {
+            for (int i = 1; i < img.width; i++)
+            {
+                val = img.width * (img.height - j) + i;
+                if (distance(img(i, j), k1) < distance(img(i, j), k2))
+                    cluster[val] = 1;
+                else
+                    cluster[val] = 2;
+            }
+        }
+        n1 = 0;
+        n2 = 0;
+        for (int j = img.height - 1; j > 0; j--)
+        {
+            for (int i = 1; i < img.width; i++)
+            {
+
+                val = img.width * (img.height - j) + i;
+                if (cluster[val] == 1)
+                {
+                    m1 += img(i, j);
+                    n1++;
+                }
+                else if (cluster[i] == 2)
+                {
+                    m2 += img(i, j);
+                    n2++;
+                }
+            }
+        }
+    	m1 /= n1;
+    	m2 /= n2;
+        
+        if (m1 == m1old && m2 == m2old)break;
+        m1old = m1;
+        m2old = m2;
+        k1 = m1;
+        k2 = m2;
+    	iter++;
+    }
+    for (int j = img.height - 1; j > 0; j--)
+    {
+        for (int i = 1; i < img.width; i++)
+        {
+            val = img.width * (img.height - j) + i;
+            if (cluster[val] == 1)img.colorIn(i, j, k1);
+            else if (cluster[val] == 2)img.colorIn(i, j, k2);
+        }
+    }	    	
+
+	printf("clustering complete %d",iter);
+}
+
 int main()
 {
     std::vector<unsigned char> inputimage; //the raw pixels
     std::vector<unsigned char> outputimage;
+    std::vector<unsigned char> enhancedimage;
 
-	const char* inputfilename = "low-light-photo-of-city.png";
-    const char* outputfilename = "output.png";
+	const char* inputfilename = "low-light-building.png";
+    const char* outputfilename = "low-light-building-enhanced.png";
     const auto aspect_ratio = 1;
     unsigned image_width;
 	unsigned image_height;
@@ -115,9 +187,11 @@ int main()
 
     //image resizing
     outputimage.resize(image_width * image_height * 4);
+    enhancedimage.resize(image_width * image_height * 4);
 
     //processing
     image output(outputfilename, outputimage, input.width, input.height);
+    image enhanced_output(outputfilename, enhancedimage, input.width, input.height);
 
     double Vbar=0;
     double Vmax=0;
@@ -149,24 +223,32 @@ int main()
             Vbar += log(input(x, y).b + 0.001);
         }
     }
+
+
     const unsigned int N = input.width * input.height;
     Vbar /= N;
     Vbar = exp(Vbar);
-    for(int y=image_height-1;y>0;y--)
+    for(int y=image_height-1;y>0;y--)//component enhancement
     {
 	    for(int x=1;x<image_width;x++)
 	    {
-			//todo: allow every pixel to be colored in some color depending on the operation used
-            //color c = convolution(input, x, y, f);
             color c = (input(x, y));
             c.b = value_component_enhancement(c.b, Vbar, Vmax)*100;
-            //std::cout<<c<<std::endl;
-            c = HSVtoRGB(c.r, c.g, c.b);
-	    	output.colorIn(x, y, (c));
+            output.colorIn(x, y, c);
 	    }
     }
-
-
+    
+   // k_means(enhanced_output);
+    for (int y = image_height - 1; y > 0; y--)
+    {
+        for (int x = 1; x < image_width; x++)
+        {
+            color c = (output(x, y));
+        	c = HSVtoRGB(c.r, c.g, c.b);
+            output.colorIn(x, y, (c));
+        }
+    }
+    
 	encodeOneStep(output.filename, output.pixels, output.width, output.height);
 }
 
