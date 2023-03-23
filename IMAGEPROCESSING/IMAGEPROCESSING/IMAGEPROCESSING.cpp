@@ -176,8 +176,8 @@ int main()
     std::vector<unsigned char> outputimage;
     std::vector<unsigned char> enhancedimage;
 
-	const char* inputfilename = "low-light-building.png";
-    const char* outputfilename = "low-light-building-enhanced.png";
+	const char* inputfilename = "sky_and_field.png";
+    const char* outputfilename = "sky_and_field_enhanced.png";
     const auto aspect_ratio = 1;
     unsigned image_width;
 	unsigned image_height;
