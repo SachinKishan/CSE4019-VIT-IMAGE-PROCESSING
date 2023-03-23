@@ -87,7 +87,7 @@ int main()
 	    {
 			//todo: allow every pixel to be colored in some color depending on the operation used
             //color c = convolution(input, x, y, f);
-            color c = median_filter(input,x,y);
+            color c = (input,x,y);
 	    	output.colorIn(x, y, (c));
 	    }
     }

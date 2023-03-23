@@ -25,11 +25,28 @@ public:
 		return *this;
 	}
 
+	color& operator*=(const double c)
+	{
+		r *= c;
+		g *= c;
+		b *= c;
+		return *this;
+	}
+
+
 	color& operator+(double a)
 	{
 		r += a;
 		g += a;
 		b += a;
+		return *this;
+	}
+
+	color& operator/(color c)
+	{
+		r = c. r;
+		g = c. g;
+		b = c. b;
 		return *this;
 	}
 
