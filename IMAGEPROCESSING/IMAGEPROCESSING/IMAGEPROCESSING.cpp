@@ -47,10 +47,6 @@ void decodeOneStep(const char* filename,  std::vector<unsigned char>& image, uns
 void color_image_pixel(std::vector<unsigned char> &image,int x,int y, color c, unsigned image_width, unsigned image_height)
 {
 
-    //const unsigned char rf = static_cast<unsigned char>(std::min(1., c.r) * 255);
-    //const unsigned char gf = static_cast<unsigned char>(std::min(1., c.g) * 255);
-    //const unsigned char bf = static_cast<unsigned char>(std::min(1., c.b) * 255);
-
     int val = 4 * image_width * (image_height - y) + 4 * x;
     //allot color
     image[val] = c.r;
