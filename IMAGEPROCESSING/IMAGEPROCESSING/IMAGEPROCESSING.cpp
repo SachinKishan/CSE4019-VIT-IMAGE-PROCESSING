@@ -43,20 +43,6 @@ void decodeOneStep(const char* filename,  std::vector<unsigned char>& image, uns
 }
 #pragma endregion
 
-
-void color_image_pixel(std::vector<unsigned char> &image,int x,int y, color c, unsigned image_width, unsigned image_height)
-{
-
-    int val = 4 * image_width * (image_height - y) + 4 * x;
-    //allot color
-    image[val] = c.r;
-    image[val + 1] = c.g;
-    image[val + 2] = c.b;
-    image[val + 3] = 255;//alpha value of 1
-}
-
-
-
 color color_to_greyscale(color c)
 {
     float col = (0.3 * c.r) + (0.59 * c.g) + (0.11 * c.b);
