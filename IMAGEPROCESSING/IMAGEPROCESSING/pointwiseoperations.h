@@ -48,3 +48,28 @@ color gray_level_slicing_with_background(color c, int r1, int r2)
     else return c;
 }
 
+//logical operations- assume binary images
+
+color AND(color c1,color c2)
+{
+    if (c1.r == 1 && c2.r == 1)return 1;
+    else return 0;
+}
+
+color OR(color c1, color c2)
+{
+    if (c1.r == 1 || c2.r == 1)return 1;
+    else return 0;
+}
+
+color NOT(color c)
+{
+    if (c.r == 1)return 0;
+    else return 1;
+}
+
+color XOR(color c1, color c2)
+{
+    if (c1.r != c2.r == 0)return 1;
+    else return 0;
+}

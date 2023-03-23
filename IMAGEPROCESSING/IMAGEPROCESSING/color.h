@@ -58,6 +58,8 @@ public:
 		return r <= a && g <= a && b <= a;
 	}
 
+
+
 };
 
 //some color additions
