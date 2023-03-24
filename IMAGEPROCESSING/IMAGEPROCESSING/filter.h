@@ -60,7 +60,7 @@ inline color median_filter(image img, int x, int y)
     return color(vals[4]);
 }
 
-inline color arithemtic_mean_filter(image img, int x, int y, int n/*size of filter*/)
+inline color arithmetic_mean_filter(image img, int x, int y, int n/*size of filter*/)
 {
     int tempx, tempy;
     color val = Black;
@@ -70,7 +70,8 @@ inline color arithemtic_mean_filter(image img, int x, int y, int n/*size of filt
         {
             tempx = x + i;
             tempy = y + j;
-            val += img(i, j);
+            if (tempx <= 0 || tempy <= 0 || tempy >= img.height || tempx >= img.width)val += padding_zero();
+            else val += img(i, j);
         }
     }
     val /= n*n;//divide the final sum of all color values by the number of values in the filter, which is n x n 
@@ -87,7 +88,8 @@ color geometry_filter(image img, int x, int y, int n/*size of filter*/)
         {
             tempx = x + i;
             tempy = y + j;
-            val *= img(i, j);
+            if (tempx <= 0 || tempy <= 0 || tempy >= img.height || tempx >= img.width)val *= padding_one();
+            else val *= img(i, j);
         }
     }
     int a =pow(val.r,1/(n*n));//power the final sum of all color values by the number of values in the filter, which is n x n 
@@ -104,7 +106,8 @@ color harmonic_filter(image img, int x, int y, int n/*size of filter*/)
         {
             tempx = x + i;
             tempy = y + j;
-            val += color(White) / img(i, j);
+            if (tempx <= 0 || tempy <= 0 || tempy >= img.height || tempx >= img.width)val *= padding_one();
+            else val += color(White) / img(i, j);
         }
     }
     val = color(n * n)/(val);//divide the final sum of all color values by the number of values in the filter, which is n x n 
@@ -120,14 +123,16 @@ color max_filter(image img, int x, int y, int n/*size of filter*/)
 {
     int tempx, tempy;
     color max = Black;
-    
+    color val;
     for (int i = -n / 2; i < n / 2; i++)
     {
         for (int j = -n / 2; j < n / 2; j++)
         {
             tempx = x + i;
             tempy = y + j;
-            if (max < img(tempx, tempy).r)max = img(tempx, tempy);
+            if (tempx <= 0 || tempy <= 0 || tempy >= img.height || tempx >= img.width)val = padding_zero();
+            else val=img(tempx, tempy);
+            if (max < img(tempx, tempy).r)max = val;
         }
     }
     return max;
@@ -136,15 +141,17 @@ color max_filter(image img, int x, int y, int n/*size of filter*/)
 color min_filter(image img, int x, int y, int n/*size of filter*/)
 {
     int tempx, tempy;
-    color min = Black;
-
+    color min = White;
+    color val;
     for (int i = -n / 2; i < n / 2; i++)
     {
         for (int j = -n / 2; j < n / 2; j++)
         {
             tempx = x + i;
             tempy = y + j;
-            if (min > img(tempx, tempy).r)min = img(tempx, tempy);
+            if (tempx <= 0 || tempy <= 0 || tempy >= img.height || tempx >= img.width)val = padding_one();
+            else val = img(tempx, tempy);
+            if (min > img(tempx, tempy).r)min = val;
         }
     }
     return min;
@@ -157,7 +164,7 @@ color midpoint_filter(image img, int x, int y, int n/*size of filter*/)
     return (max + min) / 2;
 }
 
-color alpha_trimmed_mean_filter(image img, int x, int y, int n/*size of filter*/)
+color alpha_trimmed_mean_filter(image img, int x, int y, int d, int n/*size of filter*/)
 {
 
 }
