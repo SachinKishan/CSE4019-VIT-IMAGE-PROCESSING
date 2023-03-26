@@ -37,5 +37,16 @@ public:
 		pixels[val + 3] = 255;//alpha value of 1
 	}
 
+	void histogram()
+	{
+		std::vector<int> number;
+		
+
+		for (int i = 0; i < pixels.size()/4; i++)number.push_back(pixels[i * 4]);
+		for (int i = 0; i < number.size(); i++)std::cout << number[i];
+		
+	}
+
+
 	
 };

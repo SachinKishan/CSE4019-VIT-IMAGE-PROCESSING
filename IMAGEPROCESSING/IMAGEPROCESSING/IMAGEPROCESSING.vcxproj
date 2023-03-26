@@ -134,6 +134,7 @@
     <ClInclude Include="color.h" />
     <ClInclude Include="convolution.h" />
     <ClInclude Include="filter.h" />
+    <ClInclude Include="frequency.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="pointwiseoperations.h" />

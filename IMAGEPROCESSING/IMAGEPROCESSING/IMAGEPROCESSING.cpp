@@ -9,7 +9,7 @@
 #include "image.h"
 #include "convolution.h"
 #include "pointwiseoperations.h"
-
+#include "frequency.h"
 
 //todo
 /**
@@ -65,9 +65,11 @@ int main()
 {
     std::vector<unsigned char> inputimage; //the raw pixels
     std::vector<unsigned char> outputimage;
+    std::vector<unsigned char> inbetweenpixels;
 
-	const char* inputfilename = "out1.png";
-    const char* outputfilename = "out2.png";
+	const char* inputfilename = "dct.png";
+    const char* outputfilename = "output.png";
+    
     const auto aspect_ratio = 1;
     unsigned image_width;
 	unsigned image_height;
@@ -77,20 +79,39 @@ int main()
 
     //image resizing
     outputimage.resize(image_width * image_height * 4);
+    inbetweenpixels.resize(image_width * image_height * 4);
 
     //processing
     image output(outputfilename, outputimage, input.width, input.height);
-    filter f(-1, -1, -1, -1, 9, -1, -1, -1, -1);
-    for(int y=image_height-1;y>0;y--)
+    image inbetween("in", inbetweenpixels, image_width, image_height);
+
+	filter f(-1, -1, -1, -1, 9, -1, -1, -1, -1);
+   /* for (int y = image_height - 1; y>0; y--)
     {
-	    for(int x=1;x<image_width;x++)
+	    for(int x=0;x<image_width;x++)
 	    {
 			//todo: allow every pixel to be colored in some color depending on the operation used
             //color c = convolution(input, x, y, f);
-            color c = (input,x,y);
-	    	output.colorIn(x, y, (c));
+            color c = input(x,y);
+            color c1 = IDCT(input, x, y);
+	    	output.colorIn(x, y, (c1));
 	    }
+    }*/
+    /*
+    for (int y = image_height - 1; y > 0; y--)
+    {
+        for (int x = 0; x < image_width; x++)
+        {
+            //todo: allow every pixel to be colored in some color depending on the operation used
+            //color c = convolution(input, x, y, f);
+            color c = inbetween(x, y);
+            color c1 = IDCT(inbetween, x, y);
+            //std::cout << std::endl << c1;
+            output.colorIn(x, y, (c1));
+        }
     }
+    */
+
 	encodeOneStep(output.filename, output.pixels, output.width, output.height);
 }
 

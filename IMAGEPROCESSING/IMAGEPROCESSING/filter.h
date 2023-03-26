@@ -113,12 +113,12 @@ color harmonic_filter(image img, int x, int y, int n/*size of filter*/)
     val = color(n * n)/(val);//divide the final sum of all color values by the number of values in the filter, which is n x n 
     return val;
 }
-
+/*
 color contraharmonic_mean_filter(image img, int x, int y)
 {
 
 }
-
+*/
 color max_filter(image img, int x, int y, int n/*size of filter*/)
 {
     int tempx, tempy;
@@ -157,14 +157,16 @@ color min_filter(image img, int x, int y, int n/*size of filter*/)
     return min;
 }
 
-color midpoint_filter(image img, int x, int y, int n/*size of filter*/)
+color midpoint_filter(image img, int x, int y, int n)
 {
     color max = max_filter(img, x, y, n);
     color min = min_filter(img, x, y, n);
     return (max + min) / 2;
 }
-
-color alpha_trimmed_mean_filter(image img, int x, int y, int d, int n/*size of filter*/)
+/*
+color alpha_trimmed_mean_filter(image img, int x, int y, int d, int n)
 {
 
 }
+
+*/
