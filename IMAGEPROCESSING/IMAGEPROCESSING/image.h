@@ -2,7 +2,7 @@
 #include <vector>
 
 #include "color.h"
-
+#include <fstream>
 class image
 {
 public:
@@ -43,10 +43,17 @@ public:
 		
 
 		for (int i = 0; i < pixels.size()/4; i++)number.push_back(pixels[i * 4]);
-		for (int i = 0; i < number.size(); i++)std::cout << number[i];
-		
-	}
+		std::cout << "c(";
+		//for (int i = 0; i < number.size(); i++)std::cout << number[i]<<",";
+		std::cout << ");";
 
+
+		//open file for writing
+		std::ofstream fw("Histograms\\histogram.txt", std::ofstream::out);
+		
+		for (int i = 0; i < number.size(); i++)fw << number[i] << "\t";
+	}
+	
 
 	
 };
