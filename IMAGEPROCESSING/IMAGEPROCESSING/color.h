@@ -44,9 +44,9 @@ public:
 
 	color& operator/(color c)
 	{
-		r = c. r;
-		g = c. g;
-		b = c. b;
+		r /= c. r;
+		g /= c. g;
+		b /= c. b;
 		return *this;
 	}
 
