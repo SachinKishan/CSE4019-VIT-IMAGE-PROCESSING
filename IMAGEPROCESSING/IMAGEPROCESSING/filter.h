@@ -113,12 +113,30 @@ color harmonic_filter(image img, int x, int y, int n/*size of filter*/)
     val = color(n * n)/(val);//divide the final sum of all color values by the number of values in the filter, which is n x n 
     return val;
 }
-/*
-color contraharmonic_mean_filter(image img, int x, int y)
-{
 
+color contraharmonic_mean_filter(image img, int x, int y, int q, int n)
+{
+    int tempx, tempy;
+    color val1=Black,val2 = Black,val=Black;
+    for (int i = -n / 2; i < n / 2; i++)
+    {
+        for (int j = -n / 2; j < n / 2; j++)
+        {
+            tempx = x + i;
+            tempy = y + j;
+            if (tempx <= 0 || tempy <= 0 || tempy >= img.height || tempx >= img.width)
+            {
+                val = padding_one();
+            }
+            else val = color(White) / img(i, j);
+
+            val1 += pow(val.r, q+1);
+            val2 += pow(val.r, q);
+        }
+    }
+    return val1 / val2;
 }
-*/
+
 color max_filter(image img, int x, int y, int n/*size of filter*/)
 {
     int tempx, tempy;
@@ -163,13 +181,36 @@ color midpoint_filter(image img, int x, int y, int n)
     color min = min_filter(img, x, y, n);
     return (max + min) / 2;
 }
-/*
-color alpha_trimmed_mean_filter(image img, int x, int y, int d, int n)
-{
 
+inline color alpha_trimmed_mean_filter(image img, int x, int y, int d, int n)
+{
+    int tempx, tempy;
+    color val=Black, temp;
+    std::vector<double> vals;
+    for (int i = -1; i < 2; i++)
+    {
+        for (int j = -1; j < 2; j++)
+        {
+            tempx = x - (i);//x- i should flip the filter
+            tempy = y - (j);//same flip for y, this means convolution will take place instead of correlation
+            if (tempx <= 0 || tempy <= 0 || tempy >= img.height || tempx >= img.width)
+                vals.push_back(padding_zero().r);//zero padding
+            else
+                vals.push_back(img(tempx, tempy).r);
+
+        }
+    }
+
+    std::sort(std::begin(vals), std::end(vals));
+    std::vector<double> trimmed;
+    std::copy(vals.begin() + d/2, vals.end()- d/2, std::back_inserter(trimmed));
+    val = Black;
+    for (int i = 0; i < trimmed.size(); i++)val += trimmed[i];
+
+    return val/(n*n-d);
 }
 
-*/
+//common filters
 
 const filter Laplacian(0, 1, 0, 1, -4, 1, 0, 1, 0);
 
