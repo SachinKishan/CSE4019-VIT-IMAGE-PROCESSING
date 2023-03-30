@@ -68,7 +68,7 @@ int main()
     std::vector<unsigned char> input2pixels;
 
 	const char* input1filename = "input.png";
-	const char* input2filename = "1BitGolemLGTw.png";
+	const char* input2filename = "input8x8.png";
     const char* outputfilename = "output.png";
     
     unsigned image_width;
@@ -93,7 +93,7 @@ int main()
 	    	output.colorIn(x, y, input1(x,y));
 	    }
     }
-    output.histogram();
+    output.histogram(255);
 	encodeOneStep(output.filename, output.pixels, output.width, output.height);
 }
 

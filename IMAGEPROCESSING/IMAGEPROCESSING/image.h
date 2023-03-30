@@ -39,28 +39,26 @@ public:
 		pixels[val + 3] = 255;//alpha value of 1
 	}
 
-	void histogram()
+	void histogram(int n)//is max pixel intensity value
 	{
-		std::vector<int> number;
+		std::vector<double> number;
 		image temp = *this;
 		for (int y = height - 1; y > 0; y--)
 	
 		{
 			for (int x = 0; x < width; x++)
 			{
-				number.push_back(temp(x, y).r);
+				number.push_back((temp(x, y).r/255.)*(n-1));
 			}
 		}
 		//open file for writing
 		std::ofstream fw("Histograms\\histogram.txt", std::ofstream::out);
-		std::unordered_map<int, int> freq;
 
-		for (int const& i : number) {
-			freq[i]++;
-		}
 
-		for (int i = 0; i < 255; i++)fw << i <<" "<<freq[i] << std::endl;
-
+		
+		fw << "c(";
+		for (int i = 0; i < number.size(); i++)fw << (int)number[i] << ",";
+		fw<< ");";
 		fw.close();
 	}
 	
