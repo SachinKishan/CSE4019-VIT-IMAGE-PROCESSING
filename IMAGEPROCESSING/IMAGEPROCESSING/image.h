@@ -3,6 +3,8 @@
 
 #include "color.h"
 #include <fstream>
+#include <unordered_map>
+
 class image
 {
 public:
@@ -40,18 +42,26 @@ public:
 	void histogram()
 	{
 		std::vector<int> number;
-		
-
-		for (int i = 0; i < pixels.size()/4; i++)number.push_back(pixels[i * 4]);
-		std::cout << "c(";
-		//for (int i = 0; i < number.size(); i++)std::cout << number[i]<<",";
-		std::cout << ");";
-
-
+		image temp = *this;
+		for (int y = height - 1; y > 0; y--)
+	
+		{
+			for (int x = 0; x < width; x++)
+			{
+				number.push_back(temp(x, y).r);
+			}
+		}
 		//open file for writing
 		std::ofstream fw("Histograms\\histogram.txt", std::ofstream::out);
-		
-		for (int i = 0; i < number.size(); i++)fw << number[i] << "\t";
+		std::unordered_map<int, int> freq;
+
+		for (int const& i : number) {
+			freq[i]++;
+		}
+
+		for (int i = 0; i < 255; i++)fw << i <<" "<<freq[i] << std::endl;
+
+		fw.close();
 	}
 	
 

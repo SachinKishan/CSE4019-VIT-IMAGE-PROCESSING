@@ -25,7 +25,7 @@ inline color contrast_stretching(color c, int m)
     return 0;
 }
 
-inline color contrast_stretching(color c,int r1, int r2, int s1, int s2)
+inline color contrast_stretching(color c,double r1, double r2, double s1, double s2)
 {
     return (c - r1) * ((s2 - s1) / (r2 - r1)) + s1;
 }

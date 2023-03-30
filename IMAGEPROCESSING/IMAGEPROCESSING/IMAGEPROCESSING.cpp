@@ -63,41 +63,36 @@ inline double random_double(double min, double max) {
 
 int main()
 {
-    std::vector<unsigned char> inputimage; //the raw pixels
+    std::vector<unsigned char> input1pixels; //the raw pixels
     std::vector<unsigned char> outputimage;
-    std::vector<unsigned char> inbetweenpixels;
+    std::vector<unsigned char> input2pixels;
 
-	const char* inputfilename = "input.png";
+	const char* input1filename = "input.png";
+	const char* input2filename = "1BitGolemLGTw.png";
     const char* outputfilename = "output.png";
     
-    const auto aspect_ratio = 1;
     unsigned image_width;
 	unsigned image_height;
 
-    decodeOneStep(inputfilename,inputimage,image_width,image_height);
-    image input(inputfilename, inputimage, image_width, image_height);
+    decodeOneStep(input1filename,input1pixels,image_width,image_height);
+    //decodeOneStep(input2filename,input2pixels,image_width,image_height);
+    image input1(input1filename, input1pixels, image_width, image_height);
+    //image input2(input2filename, input2pixels, image_width, image_height);
 
     //image resizing
     outputimage.resize(image_width * image_height * 4);
-    inbetweenpixels.resize(image_width * image_height * 4);
 
     //processing
-    image output(outputfilename, outputimage, input.width, input.height);
-    image inbetween("in", inbetweenpixels, image_width, image_height);
+    image output(outputfilename, outputimage, input1.width, input1.height);
 
-	filter f(-1, -1, -1, -1, 9, -1, -1, -1, -1);
     for (int y = image_height - 1; y>0; y--)
     {
 	    for(int x=0;x<image_width;x++)
 	    {
-			//todo: allow every pixel to be colored in some color depending on the operation used
-            //color c = convolution(input, x, y, f);
-            color c =color_to_greyscale(input(x,y));
-	    	output.colorIn(x, y, (c));
+            color c = contrast_stretching(color_to_greyscale(input1(x, y)),0,255,127,200);
+	    	output.colorIn(x, y, input1(x,y));
 	    }
     }
-    
-    
     output.histogram();
 	encodeOneStep(output.filename, output.pixels, output.width, output.height);
 }

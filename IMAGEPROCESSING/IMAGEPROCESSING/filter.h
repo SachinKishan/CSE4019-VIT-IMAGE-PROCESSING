@@ -170,3 +170,13 @@ color alpha_trimmed_mean_filter(image img, int x, int y, int d, int n)
 }
 
 */
+
+const filter Laplacian(0, 1, 0, 1, -4, 1, 0, 1, 0);
+
+const filter HorizontalPrewitt(-1, -1, -1, 0, 0, 0, 1, 1, 1);
+
+const filter VerticalPrewitt(-1, 0, 1, -1, 0, 1, -1, 0, 1);
+
+const filter HorizontalSobel(-1, -2, -1, 0, 0, 0, 1, 2, 1);
+
+const filter VerticalSobel(-1, 0, 1, -2, 0, 2, -1, 0, 1);
