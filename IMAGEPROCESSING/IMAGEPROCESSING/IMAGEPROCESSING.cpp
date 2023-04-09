@@ -89,11 +89,11 @@ int main()
     {
 	    for(int x=0;x<image_width;x++)
 	    {
-            color c = contrast_stretching(color_to_greyscale(input1(x, y)),0,255,127,200);
-	    	output.colorIn(x, y, input1(x,y));
+            color c = ((input1(x,y)));
+	    	output.colorIn(x, y, c);
 	    }
     }
-    output.histogram(255);
+    //output.histogram(255);
 	encodeOneStep(output.filename, output.pixels, output.width, output.height);
 }
 
